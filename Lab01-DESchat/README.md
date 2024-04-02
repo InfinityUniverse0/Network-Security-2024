@@ -1,5 +1,12 @@
 # Lab-01 基于 DES 加密的 TCP 聊天程序
 
+<p align="center">
+    <img src="https://img.shields.io/badge/License-MIT-blue" alt="License">
+    <img src="https://img.shields.io/badge/Linux-✅-success" alt="Platform">
+    <img src="https://img.shields.io/badge/MacOS-✅-success" alt="Platform">
+    <img src="https://img.shields.io/badge/Windows-✅-success" alt="Platform">
+</p>
+
 > 武桐西 2112515 信息安全
 
 ## 一、实验目的与要求
@@ -419,3 +426,40 @@ TCP这部分与上学期的计算机网络中的实验任务类似，这里不�
 通过本次实验，我复习回顾了上学期的密码学与计算机网络的相关知识，成功地将自己的所学应用到实践当中去，体会到了“读万卷书，行万里路”，做事需要躬身实践的道理。
 
 希望经过这学期的学习，我能够在网络安全的道路上越走越远！
+
+---
+
+## Quick Start
+
+### :tada: Multi-Platform
+
+You can run this chat program on Linux:penguin:, MacOS:apple: and Windows:checkered_flag: .
+
+**Prerequisite**: Please make sure that you have installed `CMake` on your machine. If not, you need to install `CMake` first.
+
+When you are in the same directory with this `README` file, run the below command in your terminal (bash, zsh, command line, or powershell):
+
+```sh
+cmake . -B build && cmake --build build
+```
+
+Then, run the below command to execute the chat program:
+
+```sh
+cd bin
+./DES_chat
+```
+
+You may choose it as server or client by inputting `s` or `c` respectively.
+
+> [!NOTE]
+>
+> **NOTE** that this program now only support chat between one client and one server.
+
+## To Do
+
+- [x] 多平台适配
+- [ ] 支持 `exit` 手动退出命令
+- [ ] 多线程并发控制（原子操作）
+- [ ] 缓冲区大小限制判断
+- [ ] 连接成功时的空行消息的消除
