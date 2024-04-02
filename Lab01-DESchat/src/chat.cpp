@@ -1,15 +1,26 @@
 // Chat
 #include "chat.h"
 #include <iostream>
-#include <arpa/inet.h>
-#include <unistd.h>
+#include <cstring>
 
 Chat::Chat() {
     Init();
+#ifdef _WIN32
+    // Initialize winsock
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        std::cerr << "Error: Failed to initialize winsock." << std::endl;
+        return;
+    }
+#endif
 }
 
 Chat::~Chat() {
     Close();
+#ifdef _WIN32
+    // Cleanup winsock
+    WSACleanup();
+#endif
 }
 
 void Chat::Init() {

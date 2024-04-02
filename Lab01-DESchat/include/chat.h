@@ -1,9 +1,18 @@
 // Chat
-
 #ifndef DES_CHAT_CHAT_H
 #define DES_CHAT_CHAT_H
 
-#include <sys/socket.h> // socket
+#ifdef _WIN32
+    #include <winsock2.h>
+    #define close(s) closesocket(s)
+    typedef SSIZE_T ssize_t;
+    typedef int socklen_t;
+#else
+    #include <sys/socket.h> // socket
+    #include <arpa/inet.h>
+    #include <unistd.h>
+#endif
+
 #include <thread> // thread
 #include <atomic> // atomic
 #include "DesOp.h" // DES Operation
