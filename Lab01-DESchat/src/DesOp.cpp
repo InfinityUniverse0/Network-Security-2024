@@ -345,8 +345,9 @@ void DesOp::Decrypt(char* cipherText, int cipherTextLength, char*& plainText, in
     // Remove padding
     int padding = cipherText[cipherTextLength - 1];
     plainTextLength = cipherTextLength - padding;
-    plainText = new char[plainTextLength];
+    plainText = new char[plainTextLength + 1];
     for (int i = 0; i < plainTextLength; i++) {
         plainText[i] = cipherText[i];
     }
+    plainText[plainTextLength] = '\0';
 }
