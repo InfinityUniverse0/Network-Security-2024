@@ -175,6 +175,10 @@ You may choose it as server or client by inputting `s` or `c` respectively.
 >
 > **NOTE** that this program now only support chat between one client and one server.
 
+> [!WARNING]
+>
+> In Windows Platform, MSVC does **NOT** suggest 128-bit integer. You can use MinGW-w64 instead.
+
 ### 文件结构
 
 本次实验的文件结构如下：
