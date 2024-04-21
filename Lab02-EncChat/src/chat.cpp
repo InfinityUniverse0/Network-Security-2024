@@ -179,18 +179,18 @@ void Chat::RunServer() {
     // Send public key and modulus
     uint64_t e = rsa.GetPublicKey();
     uint64_t n = rsa.GetModulus();
-    if (send(clientSocket, &e, sizeof(e), 0) < 0) {
+    if (send(clientSocket, reinterpret_cast<const char*>(&e), sizeof(e), 0) < 0) {
         std::cerr << "Error: Failed to send public key." << std::endl;
         return;
     }
-    if (send(clientSocket, &n, sizeof(n), 0) < 0) {
+    if (send(clientSocket, reinterpret_cast<const char*>(&n), sizeof(n), 0) < 0) {
         std::cerr << "Error: Failed to send modulus." << std::endl;
         return;
     }
 
     // Receive DES key from client
     uint64_t desKey_enc[8];
-    if (recv(clientSocket, desKey_enc, sizeof(desKey_enc), 0) < 0) {
+    if (recv(clientSocket, reinterpret_cast<char*>(desKey_enc), sizeof(desKey_enc), 0) < 0) {
         std::cerr << "Error: Failed to receive DES key." << std::endl;
         return;
     }
@@ -230,11 +230,11 @@ void Chat::RunClient() {
 
     // Receive RSA public key and modulus from server
     uint64_t e, n;
-    if (recv(clientSocket, &e, sizeof(e), 0) < 0) {
+    if (recv(clientSocket, reinterpret_cast<char*>(&e), sizeof(e), 0) < 0) {
         std::cerr << "Error: Failed to receive public key." << std::endl;
         return;
     }
-    if (recv(clientSocket, &n, sizeof(n), 0) < 0) {
+    if (recv(clientSocket, reinterpret_cast<char*>(&n), sizeof(n), 0) < 0) {
         std::cerr << "Error: Failed to receive modulus." << std::endl;
         return;
     }
@@ -247,7 +247,7 @@ void Chat::RunClient() {
     delete[] desKey; // Release memory
 
     // Send DES key to server
-    if (send(clientSocket, desKey_enc, sizeof(desKey_enc), 0) < 0) {
+    if (send(clientSocket, reinterpret_cast<const char*>(desKey_enc), sizeof(desKey_enc), 0) < 0) {
         std::cerr << "Error: Failed to send DES key." << std::endl;
         return;
     }
