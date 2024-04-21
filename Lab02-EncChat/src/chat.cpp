@@ -29,6 +29,7 @@ void Chat::Init() {
     serverIp = DEFAULT_SERVER_IP;
     serverPort = DEFAULT_SERVER_PORT;
     isRunning = false;
+    exited = false;
 }
 
 void Chat::Connect() {
@@ -55,6 +56,13 @@ void Chat::Send() {
     std::cin.getline(message, MAX_MESSAGE_LENGTH);
     char* cipherText = nullptr;
     int cipherTextLength = -1;
+
+    // Exit command
+    if (strcmp(message, EXIT_COMMAND) == 0) {
+        isRunning = false;
+        exited = true;
+    }
+
     des.Encrypt(message, strlen(message), cipherText, cipherTextLength);
     if (send(clientSocket, cipherText, cipherTextLength, 0) < 0) {
         std::cerr << "Error: Failed to send message." << std::endl;
@@ -77,13 +85,24 @@ void Chat::ReceiveThread() {
         memset(buffer, 0, sizeof(buffer));
         ssize_t len = recv(clientSocket, buffer, sizeof(buffer), 0);
         if (len <= 0) {
-            std::cerr << "Error: Failed to receive message or connection closed." << std::endl;
             isRunning = false;
+            if (!exited) {
+                std::cerr << "Error: Failed to receive message or connection closed." << std::endl;
+            }
             break;
         }
         plainText = nullptr;
         plainTextLength = -1;
         des.Decrypt(buffer, len, plainText, plainTextLength);
+
+        // Exit command
+        if (strcmp(plainText, EXIT_COMMAND) == 0) {
+            isRunning = false;
+            delete[] plainText;
+            std::cout << info << " exited." << std::endl;
+            break;
+        }
+
         std::cout << info << ": " << plainText << std::endl;
         delete[] plainText;
     }

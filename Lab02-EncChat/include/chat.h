@@ -32,7 +32,8 @@ private:
     int serverPort; // Server port
     char message[MAX_MESSAGE_LENGTH]; // Message
     char buffer[MAX_MESSAGE_LENGTH]; // Buffer
-    bool isRunning; // Running flag
+    std::atomic<bool> isRunning; // Running flag
+    std::atomic<bool> exited; // Exited flag
     std::thread receiveThread; // Receive message thread object
     DesOp des; // DES Operation
     RSA rsa; // RSA
