@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < 16; i++) {
             sscanf(md5str.substr(i * 2, 2).c_str(), "%2hhx", &md5hash[i]);
         }
-        
+
         if (CompareMD5Hash(hash, md5hash)) {
             std::cout << "MD5 hash matched" << std::endl;
             std::cout << filename << ": Validated SUCCESS" << std::endl;

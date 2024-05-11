@@ -259,6 +259,8 @@ void MD5::MD5_memcpy(uint8_t *output, const uint8_t *input, size_t length) {
     for (size_t i = 0; i < length; i++) {
         output[i] = input[i];
     }
+    // You can use std::memcpy instead of this function if your compiler supports it.
+    // std::memcpy(output, input, length);
 }
 
 /*
@@ -268,6 +270,8 @@ void MD5::MD5_memset(uint8_t *output, uint8_t value, size_t length) {
     for (size_t i = 0; i < length; i++) {
         output[i] = (uint8_t)value;
     }
+    // You can use std::memset instead of this function if your compiler supports it.
+    // std::memset(output, value, length);
 }
 
 /*
