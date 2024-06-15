@@ -1,0 +1,6 @@
+// TCP FIN Scan
+
+#ifndef PORTSCANNER_TCP_FIN_H
+#define PORTSCANNER_TCP_FIN_H
+
+#endif //PORTSCANNER_TCP_FIN_H

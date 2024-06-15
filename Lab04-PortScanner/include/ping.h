@@ -1,0 +1,6 @@
+// ping
+
+#ifndef PORTSCANNER_PING_H
+#define PORTSCANNER_PING_H
+
+#endif //PORTSCANNER_PING_H
