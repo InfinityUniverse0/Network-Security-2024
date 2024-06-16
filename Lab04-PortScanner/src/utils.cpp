@@ -1,6 +1,7 @@
 // Utils Functions
 
 #include "utils.h"
+#include "defs.h"
 
 uint16_t calcChecksum(void* buf, int length) {
     auto* buffer = (uint16_t*)buf;
@@ -17,4 +18,8 @@ uint16_t calcChecksum(void* buf, int length) {
     sum = (sum >> 16) + (sum & 0xFFFF);
     sum += (sum >> 16);
     return (uint16_t)(~sum);
+}
+
+bool checkPort(const uint16_t port) {
+    return port >= MIN_PORT && port <= MAX_PORT;
 }

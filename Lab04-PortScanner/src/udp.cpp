@@ -148,7 +148,7 @@ bool udpScan(const std::string& host_ip, const uint16_t port) {
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         if (duration > TIMEOUT_MS) {
-            std::cout << "UDP Scan " << host_ip << ":" << port << " Port open" << std::endl;
+            std::cout << "UDP Scan " << host_ip << ":" << port << " Port open (May be lost)" << std::endl;
             close(sockfd);
             delete[] buffer;
             return true;
