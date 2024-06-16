@@ -2,6 +2,8 @@
 
 #include "ping.h"
 #include <iostream>
+#include <string.h>
+#include <chrono>
 #include <sys/socket.h>
 #include <netinet/ip_icmp.h>
 #include <arpa/inet.h>
@@ -55,12 +57,21 @@ bool ping(const std::string &host_ip) {
 
     // ICMP packet
     icmp_hdr_t icmp;
+    #ifdef __APPLE__
     icmp.icmp_type = ICMP_ECHO;
     icmp.icmp_code = 0;
     icmp.icmp_id = getpid();  // Use PID as ICMP ID to identify the received ICMP packet
     icmp.icmp_seq = 0;
     icmp.icmp_cksum = 0;
     icmp.icmp_cksum = calcChecksum(&icmp, sizeof(icmp));
+    #elif __linux__
+    icmp.type = ICMP_ECHO;
+    icmp.code = 0;
+    icmp.un.echo.id = getpid();  // Use PID as ICMP ID to identify the received ICMP packet
+    icmp.un.echo.sequence = 0;
+    icmp.checksum = 0;
+    icmp.checksum = calcChecksum(&icmp, sizeof(icmp));
+    #endif
 
     // Send ICMP ECHO packet
     if (sendto(sockfd, &icmp, sizeof(icmp), 0, (sockaddr*)&addr, sizeof(addr)) <= 0) {
@@ -89,6 +100,7 @@ bool ping(const std::string &host_ip) {
             int ip_hdr_len = ip_hdr->ip_hl << 2;
             auto* icmp_header = (icmp_hdr_t*)(recv_buffer + ip_hdr_len);
 
+            #ifdef __APPLE__
             if (icmp_header->icmp_type == ICMP_ECHOREPLY &&
                 icmp_header->icmp_id == icmp.icmp_id &&
                 icmp_header->icmp_seq == icmp.icmp_seq &&
@@ -97,6 +109,16 @@ bool ping(const std::string &host_ip) {
                 close(sockfd);
                 return true;
             }
+            #elif __linux__
+            if (icmp_header->type == ICMP_ECHOREPLY &&
+                icmp_header->un.echo.id == icmp.un.echo.id &&
+                icmp_header->un.echo.sequence == icmp.un.echo.sequence &&
+                recv_addr.sin_addr.s_addr == addr.sin_addr.s_addr) {
+                std::cout << "Ping " << host_ip << " successful!" << std::endl;
+                close(sockfd);
+                return true;
+            }
+            #endif
         }
         auto end = std::chrono::high_resolution_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
